@@ -18,31 +18,29 @@ services:
       - ./consensus:/consensus
       - ./execution:/execution
 
-  # Removes the database of the go-ethereum execution client to ensure we start from a clean state.
-  # (geth has a `removedb` option, but it asks for a keyboard confirmation, so we use this instead)
-  geth-remove-db:
+  # Removes the database execution client
+  reth-remove-db:
     image: "alpine:3.19.0"
-    command: rm -rf /execution/geth
+    command: rm -rf /root/.local/share/reth/111777/db
     volumes:
       - ./execution:/execution
 
   # Sets up the genesis configuration for the go-ethereum client from a JSON file.
-  geth-genesis:
-    image: "ethereum/client-go:latest"
-    command: --datadir=/execution init /execution/genesis.json
+  reth-genesis:
+    image: "ghcr.io/paradigmxyz/reth"
+    command: 
+      - init 
+      - --chain=/execution/genesis.json
     volumes:
       - ./execution:/execution
       - ./execution/genesis.json:/execution/genesis.json
     depends_on:
       create-beacon-chain-genesis:
         condition: service_completed_successfully
-      geth-remove-db:
+      reth-remove-db:
         condition: service_completed_successfully
 
   # Runs a Prysm beacon chain from a specified genesis state created in the previous step
-  # and connects to go-ethereum in the same network as the execution client.
-  # The account used in go-ethereum is set as the suggested fee recipient for transactions
-  # proposed via the validators attached to the beacon node.
   beacon-chain:
     image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v4.1.1"
     command:
@@ -56,10 +54,10 @@ services:
       - --chain-config-file=/consensus/config.yml
       # We specify the chain id used by our execution client
       - --contract-deployment-block=0
-      - --chain-id=${CHAIN_ID:-32382}
+      - --chain-id=${CHAIN_ID:-111777}
+      - --execution-endpoint=http://reth:8551
       - --rpc-host=0.0.0.0
       - --grpc-gateway-host=0.0.0.0
-      - --execution-endpoint=http://geth:8551
       - --accept-terms-of-use
       - --jwt-secret=/execution/jwtsecret
       - --suggested-fee-recipient=0x123463a4b065722e99115d6c222f267d9cabb524
@@ -80,41 +78,38 @@ services:
       - ./execution:/execution
       - ./execution/jwtsecret:/execution/jwtsecret
 
-  # Runs the go-ethereum execution client with the specified, unlocked account and necessary
+  # Runs the reth execution client with the specified, unlocked account and necessary
   # APIs to allow for proof-of-stake consensus via Prysm.
-  geth:
-    image: "ethereum/client-go:latest"
+  reth:
+    image: "ghcr.io/paradigmxyz/reth"
     command:
+      - node
       - --http
-      - --http.api=eth,net,web3
       - --http.addr=0.0.0.0
+      - --http.api=all
       - --http.corsdomain=*
       - --ws
-      - --ws.api=eth,net,web3
       - --ws.addr=0.0.0.0
+      - --ws.api=all
       - --ws.origins=*
-      - --authrpc.vhosts=*
       - --authrpc.addr=0.0.0.0
+      - --authrpc.port=8551
       - --authrpc.jwtsecret=/execution/jwtsecret
-      - --datadir=/execution
-      - --allow-insecure-unlock
-      - --unlock=0x123463a4b065722e99115d6c222f267d9cabb524
-      - --password=/execution/geth_password.txt
-      - --nodiscover
-      - --syncmode=full
+      - --chain=/execution/genesis.json
+      - --disable-discovery
     ports:
       - 8551:8551
       - 8545:8545
       - 8546:8546
     depends_on:
-      geth-genesis:
+      reth-genesis:
         condition: service_completed_successfully
       beacon-chain:
         condition: service_started
     volumes:
       - ./execution:/execution
       - ./execution/jwtsecret:/execution/jwtsecret
-      - ./execution/geth_password.txt:/execution/geth_password.txt
+      - ./execution/reth_password.txt:/execution/reth_password.txt
 
   # We run a validator client with 64, deterministically-generated keys that match
   # The validator keys present in the beacon chain genesis state generated a few steps above.
