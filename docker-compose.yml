@@ -42,7 +42,7 @@ services:
 
   # Runs a Prysm beacon chain from a specified genesis state created in the previous step
   beacon-chain:
-    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v4.1.1"
+    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.0.3"
     command:
       - --datadir=/consensus/beacondata
       # No peers to sync with in this testnet, so setting to 0
@@ -114,7 +114,7 @@ services:
   # We run a validator client with 64, deterministically-generated keys that match
   # The validator keys present in the beacon chain genesis state generated a few steps above.
   validator:
-    image: "gcr.io/prysmaticlabs/prysm/validator:v4.1.1"
+    image: "gcr.io/prysmaticlabs/prysm/validator:v5.0.3"
     command:
       - --beacon-rpc-provider=beacon-chain:4000
       - --datadir=/consensus/validatordata
