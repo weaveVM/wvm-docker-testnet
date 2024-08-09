@@ -4,3 +4,10 @@ consensus/validatordata
 execution/reth
 execution/reth.ipc
 .idea/
+.keys
+./.keys
+.keys/
+/.keys
+execution/key.json
+node_modules
+./node_modules

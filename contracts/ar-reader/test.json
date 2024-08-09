@@ -1,0 +1,7 @@
+[
+  {
+    "method": "read_from_arweave",
+    "args": ["bs318IdjLWQK7pF_bNIbJnpade8feD7yGAS8xIffJDI"],
+    "expected": "0x48656c6c6f20776f726c64"
+  }
+]

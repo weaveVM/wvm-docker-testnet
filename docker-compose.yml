@@ -27,7 +27,7 @@ services:
 
   # Sets up the genesis configuration for the go-ethereum client from a JSON file.
   reth-genesis:
-    image: "ghcr.io/paradigmxyz/reth"
+    image: "wevm:local"
     command: 
       - init 
       - --chain=/execution/genesis.json
@@ -81,7 +81,7 @@ services:
   # Runs the reth execution client with the specified, unlocked account and necessary
   # APIs to allow for proof-of-stake consensus via Prysm.
   reth:
-    image: "ghcr.io/paradigmxyz/reth"
+    image: "wevm:local"
     command:
       - node
       - --http
@@ -110,6 +110,8 @@ services:
       - ./execution:/execution
       - ./execution/jwtsecret:/execution/jwtsecret
       - ./execution/reth_password.txt:/execution/reth_password.txt
+    environment:
+      - CONFIG=/execution/bq-config.json
 
   # We run a validator client with 64, deterministically-generated keys that match
   # The validator keys present in the beacon chain genesis state generated a few steps above.
