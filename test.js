@@ -12,8 +12,9 @@ function hex2a(hexx) {
 }
 
 const CONTRACTS_TO_TEST = [
+    'ar-writer',
     'ar-reader',
-    'ar-writer'
+    'ar-read-block'
 ];
 
 // Creating a signing account from a private key
@@ -29,7 +30,13 @@ const testContract = async (test) => {
     const runTest = async (contractAddress) => {
         const contractInstance = new web3.eth.Contract(abi, contractAddress);
         for (test of testData) {
-            const call = await contractInstance.methods[test.method](...test.args).call();
+            let call;
+            if(test.args.length) {
+                call = await contractInstance.methods[test.method](...test.args).call();
+            } else {
+                call = await contractInstance.methods[test.method]().call();
+
+            }
             if(test.expected !== null) {
                 if (call !== test.expected) {
                     throw new Error(`Invalid test result. Expected: ${test.expected}. Real: ${call}`);
