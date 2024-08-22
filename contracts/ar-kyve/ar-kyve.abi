@@ -1,0 +1,15 @@
+[
+	{
+		"inputs": [],
+		"name": "read_kyve_blob",
+		"outputs": [
+			{
+				"internalType": "bytes",
+				"name": "",
+				"type": "bytes"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

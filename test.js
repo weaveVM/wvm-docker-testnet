@@ -14,11 +14,12 @@ function hex2a(hexx) {
 const CONTRACTS_TO_TEST = [
     'ar-writer',
     'ar-reader',
-    'ar-read-block'
+    'ar-read-block',
+    'ar-kyve'
 ];
 
 // Creating a signing account from a private key
-const signer = web3.eth.accounts.privateKeyToAccount(process.env.SIGNER_KEY);
+const signer = web3.eth.accounts.privateKeyToAccount(process.env.SIGNER_KEY || '0x9234bd23a4180e3a37a565150b058e20987dceb6ac63d98a571ec8197222242c');
 web3.eth.accounts.wallet.add(signer);
 
 const testContract = async (test) => {
