@@ -27,7 +27,7 @@ services:
 
   # Sets up the genesis configuration for the go-ethereum client from a JSON file.
   reth-genesis:
-    image: "wevm:local"
+    image: "wvm:local"
     command: 
       - init 
       - --chain=/execution/genesis.json
@@ -81,7 +81,7 @@ services:
   # Runs the reth execution client with the specified, unlocked account and necessary
   # APIs to allow for proof-of-stake consensus via Prysm.
   reth:
-    image: "wevm:local"
+    image: "wvm:local"
     command:
       - node
       - --http
