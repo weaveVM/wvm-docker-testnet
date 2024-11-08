@@ -28,6 +28,8 @@ services:
   # Sets up the genesis configuration for the go-ethereum client from a JSON file.
   reth-genesis:
     image: "wvm:local"
+    environment:
+      - CONFIG=/execution/bq-config.json
     command: 
       - init 
       - --chain=/execution/genesis.json

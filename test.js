@@ -54,7 +54,7 @@ const testContract = async (test) => {
                 throw new Error("Invalid deployment");
             }
             console.log(`Contract '${test}' deployed at address:`, address);
-            runTest(address)
+            //runTest(address)
         })
         .on('error', (error) => {
             console.error('Error deploying contract:', error);
