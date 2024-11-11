@@ -36,6 +36,8 @@ services:
     volumes:
       - ./execution:/execution
       - ./execution/genesis.json:/execution/genesis.json
+      - ./execution/bq-config.json:/execution/bq-config.json
+      - ./execution/key.json:/execution/key.json
     depends_on:
       create-beacon-chain-genesis:
         condition: service_completed_successfully
