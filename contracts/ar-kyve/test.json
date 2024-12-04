@@ -2,6 +2,7 @@
   {
     "method": "read_kyve_blob",
     "args": [],
-    "expected": "0x39323338303136"
+    "expected": "0x",
+    "expected_old": "0x39323338303136"
   }
 ]

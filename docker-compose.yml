@@ -30,8 +30,8 @@ services:
     image: "wvm:local"
     environment:
       - CONFIG=/execution/bq-config.json
-    command: 
-      - init 
+    command:
+      - init
       - --chain=/execution/genesis.json
     volumes:
       - ./execution:/execution
@@ -116,6 +116,7 @@ services:
       - ./execution/reth_password.txt:/execution/reth_password.txt
     environment:
       - CONFIG=/execution/bq-config.json
+      - BLOCKED_PC=17,18,19,20,21,22
 
   # We run a validator client with 64, deterministically-generated keys that match
   # The validator keys present in the beacon chain genesis state generated a few steps above.

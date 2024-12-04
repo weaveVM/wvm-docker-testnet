@@ -1,7 +1,9 @@
 [
   {
     "method": "upload_to_arweave",
-    "args": ["Hello World"],
+    "args": [
+      "Hello World"
+    ],
     "expected": null
   }
 ]

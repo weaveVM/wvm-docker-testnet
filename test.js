@@ -14,7 +14,7 @@ function hex2a(hexx) {
 const CONTRACTS_TO_TEST = [
     'ar-writer',
     'ar-reader',
- //   'ar-read-block',
+    'ar-read-block',
     'ar-kyve'
 ];
 
